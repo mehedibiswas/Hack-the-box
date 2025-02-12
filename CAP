@@ -1,0 +1,23 @@
+I have solved the CAP room in hack the box.
+
+To solve the room some priliminary knowledge is required such as nmap basic scan,python,wireshark packet analysis and privilege escalations.
+
+First I connected with openvpn,as hack the box is only acceciable if we are in same network,which we can done using openvpn.
+I spawn the IP and browse it,I find a website.I also use nmap for basic scan "nmap -sV -Pn <IP>".I enumerate all the links and pages in the website. 
+In the nmap scan I find three services open (http,ssh,ftp).When enumeratin I find that there is path "ip/data/14" in the path I manually change the number and 
+find that the conent also change which indicate the IDOR vulnerability.So I donwload the  pcap file for "ip/data/0" path and successful login "nathan" with password
+"Buck3tH4TF0RM3!". I login as nathan by ssh using command "ssh nathan@<IP>".I enumerate every thing as nathan what is in this home directory.
+
+
+Now it's time for privilega escalations!!
+I find that Python3 is installed on the machine.So write a python script
+import os
+os.setuid(0)
+os.system("/bin/bash")
+
+which is used for make the current user as a root.I run the python script and get the root access.I aslo check the script which is special capabilities by 
+using "getcap -r / 2>/dev/null".Finally visits the /root directory to solve the room.
+
+
+
+
